@@ -1,0 +1,30 @@
+{
+    "name": "cinghie/yii2-logger",
+    "description": "Yii2 Logger to create log to Database or File in a Yii2 site.",
+    "keywords": [
+        "yii2 log", 
+        "yii2 logger", 
+        "yii2 database log",
+        "yii2 db log",
+        "yii2 file log",
+        "yii2 log file"
+    ],
+    "homepage": "https://github.com/cinghie/yii2-logger",
+    "type": "yii2-extension",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Gogodigital.it",
+            "email": "info@gogodigital.it",
+            "homepage": "http://www.gogodigital.it/"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "~2.0.14"
+    },
+    "autoload": {
+        "psr-4": {
+            "cinghie\\logger\\": ""
+        }
+    }
+}
