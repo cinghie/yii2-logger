@@ -36,9 +36,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="separator"></div>
 
-<div class="loggers-view row">
+<div class="logger-view row">
 
-	<?php if(Yii::$app->getModule('loggers')->showTitles): ?>
+	<?php if(Yii::$app->getModule('logger')->showTitles): ?>
         <div class="page-header">
             <h1><?= Html::encode($this->title) ?></h1>
         </div>

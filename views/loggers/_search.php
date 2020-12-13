@@ -9,7 +9,7 @@ use yii\widgets\ActiveForm;
 
 ?>
 
-<div class="loggers-search">
+<div class="logger-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],

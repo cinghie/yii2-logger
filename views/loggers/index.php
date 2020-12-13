@@ -44,9 +44,9 @@ $this->registerJs('$(document).ready(function()
 
 <div class="separator"></div>
 
-<div class="loggers-index">
+<div class="logger-index">
 
-	<?php if(Yii::$app->getModule('loggers')->showTitles): ?>
+	<?php if(Yii::$app->getModule('logger')->showTitles): ?>
         <div class="page-header">
             <h1><?= Html::encode($this->title) ?></h1>
         </div>

@@ -9,7 +9,7 @@ use kartik\widgets\ActiveForm;
 
 ?>
 
-<div class="loggers-form">
+<div class="logger-form">
 
     <?php $form = ActiveForm::begin() ?>
 

@@ -43,7 +43,7 @@ use cinghie\logger\Logger;
 'modules' => [
 
     // Yii2 Loggers
-    'loggers' => [
+    'logger' => [
         'class' => Logger::class,
     ],
     
