@@ -38,12 +38,13 @@ $ php yii migrate/up --migrationPath=@vendor/cinghie/yii2-logger/migrations
 Add in your common configuration file:
 
 ```
-use cinghie\logger\components\LoggerDB;
+use cinghie\logger\Logger;
 
-'components' => [
+'modules' => [
 
-    'logger' => [
-    	'class' => LoggerDB::class,
+    // Yii2 Loggers
+    'loggers' => [
+        'class' => Logger::class,
     ],
     
 ],
