@@ -12,12 +12,14 @@
 
 namespace cinghie\logger;
 
+use Yii;
+use yii\base\Module;
 use yii\i18n\PhpMessageSource;
 
 /**
  * Class Logger
  */
-class Logger
+class Logger extends Module
 {
 	/**
 	 * @var array
