@@ -25,6 +25,14 @@ or add
 "cinghie/yii2-logger": "*"
 ```
 
+### 2. Update database schema
+
+Run the following command:
+
+```
+$ php yii migrate/up --migrationPath=@vendor/cinghie/yii2-logger/migrations
+```
+
 ## Configuration
 
 Add in your common configuration file:
