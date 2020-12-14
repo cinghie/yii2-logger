@@ -63,6 +63,7 @@ $logger->action = 'ActionName';
 $logger->created_by = NULL;
 $logger->entity_name = date('Y-m-d H:i:s');
 $logger->data = 'DATA CONTENT';
+$logger->ip = Yii::app()->request->getUserHostAddress();
 $logger->save();
 
 ```

@@ -26,19 +26,10 @@ $this->registerJs('$(document).ready(function()
 <div class="row">
 
     <!-- action menu -->
-    <div class="col-md-8">
-        </div>
+    <div class="col-md-8"></div>
 
     <!-- action buttons -->
-    <div class="col-md-4">
-
-		<?= $searchModel->getDeleteButton() ?>
-
-	    <?= $searchModel->getUpdateButton() ?>
-
-	    <?= $searchModel->getCreateButton() ?>
-
-    </div>
+    <div class="col-md-4"></div>
 
 </div>
 
