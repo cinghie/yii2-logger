@@ -50,3 +50,19 @@ use cinghie\logger\Logger;
 ],
 
 ```
+
+## Use Logger
+
+```
+use cinghie\logger\models\Loggers;
+
+$logger = new Loggers();
+$logger->entity_name = 'EntityName';
+$logger->entity_id = 'EntityID';
+$logger->action = 'ActionName';
+$logger->created_by = NULL;
+$logger->entity_name = date('Y-m-d H:i:s');
+$logger->data = 'DATA CONTENT';
+$logger->save();
+
+```

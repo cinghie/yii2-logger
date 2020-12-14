@@ -12,11 +12,15 @@
 
 namespace cinghie\logger\models;
 
+use kartik\helpers\Html;
 use Yii;
+use cinghie\traits\CreatedTrait;
 use cinghie\traits\UserTrait;
 use cinghie\traits\UserHelpersTrait;
 use cinghie\traits\ViewsHelpersTrait;
+use yii\base\InvalidParamException;
 use yii\db\ActiveRecord;
+use yii\helpers\Url;
 
 /**
  * This is the model class for table "{{%loggers}}".
@@ -25,13 +29,14 @@ use yii\db\ActiveRecord;
  * @property string $entity_name
  * @property string|null $entity_id
  * @property string|null $action
+ * @property string|null $data
+ * @property string|null $ip
  * @property int|null $created_by
  * @property string $created
- * @property string|null $data
  */
 class Loggers extends ActiveRecord
 {
-    use UserTrait, UserHelpersTrait, ViewsHelpersTrait;
+    use CreatedTrait, UserTrait, UserHelpersTrait, ViewsHelpersTrait;
 
     /**
      * {@inheritdoc}
@@ -51,6 +56,7 @@ class Loggers extends ActiveRecord
             [['created_by'], 'integer'],
             [['created'], 'safe'],
             [['data'], 'string'],
+            [['ip'], 'string', 'max' => 16],
             [['entity_name', 'entity_id', 'action'], 'string', 'max' => 32],
         ];
     }
@@ -66,6 +72,7 @@ class Loggers extends ActiveRecord
             'entity_id' => Yii::t('traits', 'Entity ID'),
             'action' => Yii::t('traits', 'Action'),
             'data' => Yii::t('traits', 'Data'),
+            'ip' => Yii::t('traits', 'IP'),
         ]);
     }
     

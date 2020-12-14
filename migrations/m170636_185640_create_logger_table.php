@@ -27,9 +27,10 @@ class m170636_185640_create_logger_table extends Migration
 			'entity_name' => $this->string(32)->notNull(),
 			'entity_id' => $this->string(32),
 			'action' => $this->string(32),
+			'data' => $this->text(),
+			'ip' => $this->string(16),
 			'created_by' => $this->integer(11)->defaultValue(null),
 			'created' => $this->dateTime()->notNull()->defaultExpression('CURRENT_TIMESTAMP'),
-			'data' => $this->text(),
 		], $this->tableOptions);
 	}
 

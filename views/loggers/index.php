@@ -78,7 +78,8 @@ $this->registerJs('$(document).ready(function()
                 'width' => '8%',
             ],
             [
-                'attribute' => 'data:ntext',
+                'attribute' => 'data',
+                'format' => 'html',
                 'hAlign' => 'center',
             ],
             [
