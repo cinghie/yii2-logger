@@ -113,7 +113,7 @@ $this->registerJs('$(document).ready(function()
         'panel' => [
             //'after' => false,
             //'before' => false,
-            'heading' => '<h3 class="panel-title"><i class=""></i></h3>',
+            'heading' => '<h3 class="panel-title"><i class="fa fa-list"></i></h3>',
             'type' => 'success',
             'showFooter' => false
         ],
