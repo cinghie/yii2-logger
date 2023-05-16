@@ -16,8 +16,8 @@ $this->params['breadcrumbs'][] = $this->title;
 // Register action buttons js
 $this->registerJs('$(document).ready(function()
     {'
-    .$searchModel->getUpdateButtonJavascript('#w4')
-    .$searchModel->getDeleteButtonJavascript('#w4').
+    .$searchModel->getUpdateButtonJavascript('#w0')
+    .$searchModel->getDeleteButtonJavascript('#w0').
     '});
 ');
 

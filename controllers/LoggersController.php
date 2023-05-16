@@ -12,6 +12,7 @@
 
 namespace cinghie\logger\controllers;
 
+use RuntimeException;
 use Yii;
 use cinghie\logger\models\Loggers;
 use cinghie\logger\models\LoggersSearch;
@@ -36,7 +37,7 @@ class LoggersController extends Controller
 		        'rules' => [
 			        [
 				        'allow' => true,
-				        'actions' => ['index'],
+				        'actions' => ['index','timeline'],
 				        'roles' => $this->module->roles
 			        ],
 		        ],
@@ -57,6 +58,21 @@ class LoggersController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Timeline Loggers models.
+     * @return mixed
+     */
+    public function actionTimeline()
+    {
+        $searchModel = new LoggersSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('timeline', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
