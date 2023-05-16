@@ -1,7 +1,7 @@
 <?php
 
-/* @var $dataProvider yii\data\ActiveDataProvider */
-/* @var $searchModel cinghie\logger\models\LoggersSearch */
+/* @var $days array */
+/* @var $items array */
 /* @var $this yii\web\View */
 
 use cinghie\adminlte\widgets\Timeline;
@@ -10,14 +10,6 @@ use kartik\helpers\Html;
 $this->title = Yii::t('traits', 'Loggers');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('logger', 'Logger'), 'url' => ['/logger/default/index']];
 $this->params['breadcrumbs'][] = $this->title;
-
-// Register action buttons js
-$this->registerJs('$(document).ready(function()
-    {'
-    .$searchModel->getUpdateButtonJavascript('#w0')
-    .$searchModel->getDeleteButtonJavascript('#w0').
-    '});
-');
 
 ?>
 
@@ -44,8 +36,8 @@ $this->registerJs('$(document).ready(function()
     <?php // echo $this->render('_search', ['model' => $searchModel]) ?>
 
     <?= Timeline::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel
+        'days' => $days,
+        'items' => $items
     ]) ?>
 
 

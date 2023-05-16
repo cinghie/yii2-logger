@@ -69,12 +69,12 @@ class LoggersController extends Controller
      */
     public function actionTimeline()
     {
-        $searchModel = new LoggersSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $items = Loggers::find()->orderBy('created DESC')->all();
+        $days = Loggers::find()->select('created_date')->orderBy('created DESC')->groupBy('created_date')->all();
 
         return $this->render('timeline', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'days' => $days,
+            'items' => $items
         ]);
     }
 

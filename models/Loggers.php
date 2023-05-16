@@ -33,6 +33,8 @@ use yii\helpers\Url;
  * @property string|null $ip
  * @property int|null $created_by
  * @property string $created
+ * @property string $created_date
+ * @property string $created_time
  */
 class Loggers extends ActiveRecord
 {
@@ -54,7 +56,7 @@ class Loggers extends ActiveRecord
         return [
             [['entity_name'], 'required'],
             [['created_by'], 'integer'],
-            [['created'], 'safe'],
+            [['created','created_date','created_time'], 'safe'],
             [['data'], 'string'],
             [['ip'], 'string', 'max' => 16],
             [['entity_name', 'entity_id', 'action'], 'string', 'max' => 32],
