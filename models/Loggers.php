@@ -12,29 +12,30 @@
 
 namespace cinghie\logger\models;
 
-use kartik\helpers\Html;
 use Yii;
 use cinghie\traits\CreatedTrait;
 use cinghie\traits\UserTrait;
 use cinghie\traits\UserHelpersTrait;
 use cinghie\traits\ViewsHelpersTrait;
-use yii\base\InvalidParamException;
 use yii\db\ActiveRecord;
-use yii\helpers\Url;
 
 /**
  * This is the model class for table "{{%loggers}}".
  *
  * @property int $id
  * @property string $entity_name
- * @property string|null $entity_id
+ * @property int $entity_id
+ * @property string $entity_code
+ * @property string $entity_model
+ * @property string $entity_url
  * @property string|null $action
  * @property string|null $data
+ * @property string|null $icon
  * @property string|null $ip
  * @property int|null $created_by
  * @property string $created
- * @property string $created_date
- * @property string $created_time
+ * @property string|null $created_date
+ * @property string|null $created_time
  */
 class Loggers extends ActiveRecord
 {
@@ -55,11 +56,12 @@ class Loggers extends ActiveRecord
     {
         return [
             [['entity_name'], 'required'],
-            [['created_by'], 'integer'],
+            [['created_by','entity_id'], 'integer'],
             [['created','created_date','created_time'], 'safe'],
             [['data'], 'string'],
             [['ip'], 'string', 'max' => 16],
-            [['entity_name', 'entity_id', 'action'], 'string', 'max' => 32],
+            [['entity_name', 'entity_code', 'entity_model', 'action'], 'string', 'max' => 32],
+            [['entity_url'], 'string', 'max' => 128],
         ];
     }
 
@@ -70,11 +72,16 @@ class Loggers extends ActiveRecord
     {
         return array_merge([
             'id' => Yii::t('traits', 'ID'),
+            'entity_code' => Yii::t('traits', 'Entity Code'),
             'entity_name' => Yii::t('traits', 'Entity Name'),
             'entity_id' => Yii::t('traits', 'Entity ID'),
+            'entity_model' => Yii::t('traits', 'Entity Model'),
+            'entity_url' => Yii::t('traits', 'Entity ID'),
             'action' => Yii::t('traits', 'Action'),
             'data' => Yii::t('traits', 'Data'),
             'ip' => Yii::t('traits', 'IP'),
+            'created_date' => Yii::t('traits', 'Created Date'),
+            'created_time' => Yii::t('traits', 'Created Time'),
         ]);
     }
     

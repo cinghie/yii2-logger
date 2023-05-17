@@ -40,5 +40,4 @@ $this->params['breadcrumbs'][] = $this->title;
         'items' => $items
     ]) ?>
 
-
 </div>
