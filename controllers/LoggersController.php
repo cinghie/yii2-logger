@@ -69,8 +69,17 @@ class LoggersController extends Controller
      */
     public function actionTimeline()
     {
-        $items = Loggers::find()->orderBy('created DESC')->all();
-        $days = Loggers::find()->select('created_date')->orderBy('created DESC')->groupBy('created_date')->all();
+        $get = Yii::$app->request->get();
+        $user_id = isset($get['user_id']) && $get['user_id'] ? (int)$get['user_id'] : '';
+
+        if($user_id) {
+            $where = ['created_by' => $user_id];
+        } else {
+            $where = [];
+        }
+
+        $items = Loggers::find()->where($where)->orderBy('created DESC')->all();
+        $days = Loggers::find()->where($where)->select('created_date')->orderBy('created DESC')->groupBy('created_date')->all();
 
         return $this->render('timeline', [
             'days' => $days,
