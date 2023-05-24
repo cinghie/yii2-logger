@@ -70,20 +70,51 @@ class LoggersController extends Controller
     public function actionTimeline()
     {
         $get = Yii::$app->request->get();
-        $user_id = isset($get['user_id']) && $get['user_id'] ? (int)$get['user_id'] : '';
+        $searchModel = new LoggersSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $where = [];
 
-        if($user_id) {
-            $where = ['created_by' => $user_id];
-        } else {
-            $where = [];
+        $action = isset($get['action']) && $get['action'] ? (string)$get['action'] : '';
+
+        if($action) {
+            $where['action'] = $action;
         }
 
-        $items = Loggers::find()->where($where)->orderBy('created DESC')->all();
-        $days = Loggers::find()->where($where)->select('created_date')->orderBy('created DESC')->groupBy('created_date')->all();
+        $created = isset($get['created']) && $get['created'] ? (string)$get['created'] : '';
+
+        if($created)
+        {
+            $explode = explode( ' | ', $created );
+            list($start, $finish) = $explode;
+            $andWhere = ['between', 'created', $start, $finish];
+        } else {
+            $andWhere = '';
+        }
+
+        $entityModel = isset($get['entity_model']) && $get['entity_model'] ? (string)$get['entity_model'] : 0;
+
+        if($entityModel) {
+            $where['entity_model'] = $entityModel;
+        }
+
+        $user_id = isset($get['user_id']) && $get['user_id'] ? (int)$get['user_id'] : 0;
+
+        if($user_id) {
+            $where['created_by'] = $user_id;
+        }
+
+        $items = Loggers::find()->where($where)->andWhere($andWhere)->orderBy('created DESC')->all();
+        $days = Loggers::find()->where($where)->andWhere($andWhere)->select('created_date')->orderBy('created DESC')->groupBy('created_date')->all();
 
         return $this->render('timeline', [
+            'action' => $action,
+            'created' => $created,
             'days' => $days,
-            'items' => $items
+            'dataProvider' => $dataProvider,
+            'entity_model' => $entityModel,
+            'items' => $items,
+            'searchModel' => $searchModel,
+            'user_id' => $user_id,
         ]);
     }
 

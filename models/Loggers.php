@@ -84,6 +84,69 @@ class Loggers extends ActiveRecord
             'created_time' => Yii::t('traits', 'Created Time'),
         ]);
     }
+
+    /**
+     * @return array|Loggers[]|null
+     */
+    public function getActions()
+    {
+        return self::find()->select('action')->distinct()->all();
+    }
+
+    /**
+     * @return array|Loggers[]|null
+     */
+    public function getModels()
+    {
+        return self::find()->select('entity_model')->distinct()->all();
+    }
+
+    /**
+     * @return string
+     */
+    public function getActionsSelect2($value = '')
+    {
+        $actions = $this->getActions();
+        $html = '<select name="action" class="form-control">';
+        $html .= '<option value="">Filtra per azione ...</option>';
+
+        foreach ($actions as $action)
+        {
+            $selected = ($value === $action['action']) ? 'selected' : '';
+
+            if(isset($action['action']) && $action['action']) {
+                $html .= '<option value="'.$action['action'].'"'.$selected.'>'.Yii::t('traits', $action['action']).'</option>';
+            }
+        }
+
+        $html .= '</select>';
+
+        return $html;
+    }
+
+    /**
+     * @return string
+     */
+    public function getModelsSelect2($value = '')
+    {
+        $models = $this->getModels();
+        $html = '<select name="entity_model" class="form-control">';
+        $html .= '<option value="">Filtra per oggetto ...</option>';
+
+        foreach ($models as $model)
+        {
+            if(isset($model['entity_model']) && $model['entity_model'])
+            {
+                $selected = ($value === $model['entity_model']) ? 'selected' : '';
+
+                $html .= '<option value="'.$model['entity_model'].'"'.$selected.'>'.Yii::t('traits', $model['entity_model']).'</option>';
+            }
+        }
+
+        $html .= '</select>';
+
+        return $html;
+    }
     
     /**
      * @return LoggersQuery the active query used by this AR class.
