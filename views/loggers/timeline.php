@@ -12,6 +12,7 @@
 use cinghie\adminlte\widgets\Timeline;
 use cinghie\logger\models\LoggersSearch;
 use kartik\helpers\Html;
+use yii\helpers\Html as HtmlEncode;
 use yii\web\View;
 
 $this->title = Yii::t('traits', 'Loggers');
@@ -36,11 +37,8 @@ $users = $searchModel->getUsersSelect2();
                 <option value="">Filtra per utente...</option>
                 <?php
                 foreach ($users as $key => $user):
-                    $selected = "";
-                    if ($user_id ===  $key) {
-                        $selected = "selected";
-                    }
-                    echo '<option value="'.$key.'" '.$selected.'>'.$user.'</option>';
+                    $selected = ($user_id === (int) $key) ? ' selected' : '';
+                    echo '<option value="' . HtmlEncode::encode($key) . '"' . $selected . '>' . HtmlEncode::encode($user) . '</option>';
                 endforeach;
                 ?>
             </select>
@@ -52,7 +50,7 @@ $users = $searchModel->getUsersSelect2();
             <?= $searchModel->getModelsSelect2($entity_model) ?>
         </div>
         <div class="col-md-3" style="display:flex;">
-            <input placeholder="Filtra per data" type="text" name="created" class="form-control" id="created" value="<?php echo $created ?>">
+            <input placeholder="Filtra per data" type="text" name="created" class="form-control" id="created" value="<?= HtmlEncode::encode($created) ?>">
         </div>
     </div>
     <div class="row">

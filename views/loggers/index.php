@@ -70,7 +70,7 @@ $this->registerJs('$(document).ready(function()
             ],
             [
                 'attribute' => 'data',
-                'format' => 'html',
+                'format' => 'text',
                 'hAlign' => 'center',
             ],
             [

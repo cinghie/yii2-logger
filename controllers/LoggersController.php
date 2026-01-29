@@ -26,6 +26,9 @@ use yii\filters\VerbFilter;
  */
 class LoggersController extends Controller
 {
+    protected $loggerClass = Loggers::class;
+    protected $loggerSearchClass = LoggersSearch::class;
+
     /**
      * {@inheritdoc}
      */
@@ -37,7 +40,7 @@ class LoggersController extends Controller
 		        'rules' => [
 			        [
 				        'allow' => true,
-				        'actions' => ['index','timeline'],
+				        'actions' => ['index', 'timeline', 'view'],
 				        'roles' => $this->module->roles
 			        ],
 		        ],
@@ -54,7 +57,7 @@ class LoggersController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new LoggersSearch();
+        $searchModel = new $this->loggerSearchClass();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -70,7 +73,7 @@ class LoggersController extends Controller
     public function actionTimeline()
     {
         $get = Yii::$app->request->get();
-        $searchModel = new LoggersSearch();
+        $searchModel = new $this->loggerSearchClass();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $where = [];
 
@@ -82,13 +85,18 @@ class LoggersController extends Controller
 
         $created = isset($get['created']) && $get['created'] ? (string)$get['created'] : '';
 
-        if($created)
-        {
-            $explode = explode( ' | ', $created );
-            list($start, $finish) = $explode;
-            $andWhere = ['between', 'created', $start, $finish];
-        } else {
-            $andWhere = '';
+        $andWhere = [];
+        if ($created) {
+            $explode = explode(' | ', $created, 2);
+            if (count($explode) === 2) {
+                $start = trim($explode[0]);
+                $finish = trim($explode[1]);
+                // Validazione formato data (YYYY-MM-DD) prima di usare in query
+                $datePattern = '/^\d{4}-\d{2}-\d{2}$/';
+                if (preg_match($datePattern, $start) && preg_match($datePattern, $finish)) {
+                    $andWhere = ['between', 'created', $start, $finish];
+                }
+            }
         }
 
         $entityModel = isset($get['entity_model']) && $get['entity_model'] ? (string)$get['entity_model'] : 0;
@@ -103,8 +111,17 @@ class LoggersController extends Controller
             $where['created_by'] = $user_id;
         }
 
-        $items = Loggers::find()->where($where)->andWhere($andWhere)->orderBy('created DESC')->all();
-        $days = Loggers::find()->where($where)->andWhere($andWhere)->select('created_date')->orderBy('created DESC')->groupBy('created_date')->all();
+        $query = Loggers::find()->where($where);
+        if (is_array($andWhere) && $andWhere !== []) {
+            $query->andWhere($andWhere);
+        }
+        $items = $query->orderBy('created DESC')->all();
+
+        $queryDays = Loggers::find()->where($where);
+        if (is_array($andWhere) && $andWhere !== []) {
+            $queryDays->andWhere($andWhere);
+        }
+        $days = $queryDays->select('created_date')->orderBy('created DESC')->groupBy('created_date')->all();
 
         return $this->render('timeline', [
             'action' => $action,
@@ -140,7 +157,7 @@ class LoggersController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Loggers::findOne($id)) !== null) {
+        if (($model = $this->loggerClass::findOne($id)) !== null) {
             return $model;
         }
 

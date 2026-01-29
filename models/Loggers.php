@@ -18,6 +18,7 @@ use cinghie\traits\UserTrait;
 use cinghie\traits\UserHelpersTrait;
 use cinghie\traits\ViewsHelpersTrait;
 use yii\db\ActiveRecord;
+use yii\helpers\Html;
 
 /**
  * This is the model class for table "{{%loggers}}".
@@ -112,11 +113,12 @@ class Loggers extends ActiveRecord
 
         foreach ($actions as $action)
         {
-            $selected = ($value === $action['action']) ? 'selected' : '';
-
-            if(isset($action['action']) && $action['action']) {
-                $html .= '<option value="'.$action['action'].'"'.$selected.'>'.Yii::t('traits', $action['action']).'</option>';
+            $actionVal = isset($action['action']) ? (string) $action['action'] : '';
+            if ($actionVal === '') {
+                continue;
             }
+            $selected = ($value === $actionVal) ? ' selected' : '';
+            $html .= '<option value="' . Html::encode($actionVal) . '"' . $selected . '>' . Html::encode(Yii::t('traits', $actionVal)) . '</option>';
         }
 
         $html .= '</select>';
@@ -135,12 +137,12 @@ class Loggers extends ActiveRecord
 
         foreach ($models as $model)
         {
-            if(isset($model['entity_model']) && $model['entity_model'])
-            {
-                $selected = ($value === $model['entity_model']) ? 'selected' : '';
-
-                $html .= '<option value="'.$model['entity_model'].'"'.$selected.'>'.Yii::t('traits', $model['entity_model']).'</option>';
+            $modelVal = isset($model['entity_model']) ? (string) $model['entity_model'] : '';
+            if ($modelVal === '') {
+                continue;
             }
+            $selected = ($value === $modelVal) ? ' selected' : '';
+            $html .= '<option value="' . Html::encode($modelVal) . '"' . $selected . '>' . Html::encode(Yii::t('traits', $modelVal)) . '</option>';
         }
 
         $html .= '</select>';
