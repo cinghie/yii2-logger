@@ -9,7 +9,7 @@
 /* @var $user_id int */
 /* @var $this yii\web\View */
 
-use cinghie\adminlte\widgets\Timeline;
+use cinghie\logger\widgets\Timeline;
 use cinghie\logger\models\LoggersSearch;
 use kartik\helpers\Html;
 use yii\helpers\Html as HtmlEncode;

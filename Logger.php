@@ -22,6 +22,13 @@ use yii\i18n\PhpMessageSource;
 class Logger extends Module
 {
 	/**
+	 * Bootstrap version bootstrap, bootstrap4, bootstrap5
+	 * 
+	 * @var string 
+	 */
+    public $bootstrap = 'bootstrap';
+
+	/**
 	 * @var array
 	 */
 	public $modelMap = [];
