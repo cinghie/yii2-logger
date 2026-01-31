@@ -6,7 +6,7 @@
 use kartik\detail\DetailView;
 use kartik\helpers\Html;
 
-$this->title = $model->id;
+$this->title = (string) $model->id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('logger', 'Logger'), 'url' => ['/logger/default/index']];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('traits', 'Loggers'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;

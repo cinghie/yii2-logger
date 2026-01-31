@@ -68,8 +68,15 @@ class LoggersController extends Controller
 
     /**
      * Timeline Loggers models.
+     * 
      * @return mixed
      */
+    /** Max length for action/entity_model (matches DB schema). */
+    private const FILTER_STRING_MAX_LENGTH = 32;
+
+    /** Max number of timeline items to load (performance). */
+    private const TIMELINE_ITEMS_LIMIT = 500;
+
     public function actionTimeline()
     {
         $get = Yii::$app->request->get();
@@ -77,21 +84,20 @@ class LoggersController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $where = [];
 
-        $action = isset($get['action']) && $get['action'] ? (string)$get['action'] : '';
-
-        if($action) {
+        $action = isset($get['action']) && $get['action'] !== '' ? (string) $get['action'] : '';
+        $action = mb_substr(trim($action), 0, self::FILTER_STRING_MAX_LENGTH);
+        if ($action !== '') {
             $where['action'] = $action;
         }
 
-        $created = isset($get['created']) && $get['created'] ? (string)$get['created'] : '';
+        $created = isset($get['created']) && $get['created'] ? (string) $get['created'] : '';
 
         $andWhere = [];
-        if ($created) {
+        if ($created !== '') {
             $explode = explode(' | ', $created, 2);
             if (count($explode) === 2) {
                 $start = trim($explode[0]);
                 $finish = trim($explode[1]);
-                // Validazione formato data (YYYY-MM-DD) prima di usare in query
                 $datePattern = '/^\d{4}-\d{2}-\d{2}$/';
                 if (preg_match($datePattern, $start) && preg_match($datePattern, $finish)) {
                     $andWhere = ['between', 'created', $start, $finish];
@@ -99,29 +105,32 @@ class LoggersController extends Controller
             }
         }
 
-        $entityModel = isset($get['entity_model']) && $get['entity_model'] ? (string)$get['entity_model'] : 0;
-
-        if($entityModel) {
+        $entityModel = isset($get['entity_model']) && $get['entity_model'] !== '' ? (string) $get['entity_model'] : '';
+        $entityModel = mb_substr(trim($entityModel), 0, self::FILTER_STRING_MAX_LENGTH);
+        if ($entityModel !== '') {
             $where['entity_model'] = $entityModel;
         }
 
-        $user_id = isset($get['user_id']) && $get['user_id'] ? (int)$get['user_id'] : 0;
-
-        if($user_id) {
+        $user_id = isset($get['user_id']) && $get['user_id'] !== '' ? (int) $get['user_id'] : 0;
+        if ($user_id > 0) {
             $where['created_by'] = $user_id;
         }
 
         $query = Loggers::find()->where($where);
-        if (is_array($andWhere) && $andWhere !== []) {
+        if ($andWhere !== []) {
             $query->andWhere($andWhere);
         }
-        $items = $query->orderBy('created DESC')->all();
+        $query->orderBy('created DESC')->limit(self::TIMELINE_ITEMS_LIMIT);
+        $items = $query->all();
 
-        $queryDays = Loggers::find()->where($where);
-        if (is_array($andWhere) && $andWhere !== []) {
-            $queryDays->andWhere($andWhere);
+        $days = [];
+        foreach ($items as $item) {
+            if (isset($item->created_date) && $item->created_date !== '') {
+                $days[$item->created_date] = ['created_date' => $item->created_date];
+            }
         }
-        $days = $queryDays->select('created_date')->orderBy('created DESC')->groupBy('created_date')->all();
+        krsort($days);
+        $days = array_values($days);
 
         return $this->render('timeline', [
             'action' => $action,
@@ -132,6 +141,7 @@ class LoggersController extends Controller
             'items' => $items,
             'searchModel' => $searchModel,
             'user_id' => $user_id,
+            'userNames' => $searchModel->getUsersSelect2(),
         ]);
     }
 
@@ -151,7 +161,9 @@ class LoggersController extends Controller
     /**
      * Finds the Loggers model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
+     * 
      * @param integer $id
+     * 
      * @return Loggers the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */

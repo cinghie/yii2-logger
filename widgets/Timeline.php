@@ -26,6 +26,14 @@ class Timeline
             return \cinghie\adminlte3\widgets\Timeline::widget($config);
         }
 
-        return \cinghie\adminlte\widgets\Timeline::widget($config);
+        if (class_exists(\cinghie\adminlte\widgets\Timeline::class)) {
+            return \cinghie\adminlte\widgets\Timeline::widget($config);
+        }
+
+        if (class_exists(\cinghie\adminlte3\widgets\Timeline::class)) {
+            return \cinghie\adminlte3\widgets\Timeline::widget($config);
+        }
+
+        return '';
     }
 }

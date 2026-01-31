@@ -18,7 +18,7 @@ class LoggersSearch extends Loggers
     {
         return [
             [['id', 'created_by'], 'integer'],
-            [['entity_name', 'entity_id', 'action', 'created', 'data'], 'safe'],
+            [['entity_name', 'entity_id', 'action', 'created', 'data', 'entity_model'], 'safe'],
         ];
     }
 

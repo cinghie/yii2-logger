@@ -7,6 +7,7 @@
 /* @var $items array */
 /* @var $searchModel LoggersSearch */
 /* @var $user_id int */
+/* @var $userNames array<int,string> */
 /* @var $this yii\web\View */
 
 use cinghie\logger\widgets\Timeline;
@@ -84,7 +85,8 @@ $users = $searchModel->getUsersSelect2();
 
     <?= Timeline::widget([
         'days' => $days,
-        'items' => $items
+        'items' => $items,
+        'userNames' => $userNames ?? [],
     ]) ?>
 
 </div>
