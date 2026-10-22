@@ -42,6 +42,61 @@ class Loggers extends ActiveRecord
 {
     use CreatedTrait, UserTrait, UserHelpersTrait, ViewsHelpersTrait;
 
+    /** Schema `ip` column length (IPv4 fits; longer IPv6 is stored empty rather than truncated garbage). */
+    public const IP_MAX_LENGTH = 16;
+
+    /**
+     * Current web request IP, safe for PHP 8.4 `filter_var()` (null is not a string).
+     */
+    public static function clientIp(): string
+    {
+        $raw = '';
+        if (Yii::$app !== null && Yii::$app->has('request')) {
+            try {
+                $raw = (string) (Yii::$app->request->userIP ?? '');
+            } catch (\Throwable $e) {
+                $raw = '';
+            }
+        }
+
+        return self::sanitizeIp($raw);
+    }
+
+    /**
+     * @param mixed $ip
+     */
+    public static function sanitizeIp($ip): string
+    {
+        if (!is_string($ip) || $ip === '') {
+            return '';
+        }
+
+        $valid = filter_var($ip, FILTER_VALIDATE_IP);
+        if (!is_string($valid) || $valid === '') {
+            return '';
+        }
+
+        if (strlen($valid) > self::IP_MAX_LENGTH) {
+            return '';
+        }
+
+        return $valid;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function beforeSave($insert)
+    {
+        if ($this->ip === null || $this->ip === '') {
+            $this->ip = self::clientIp();
+        } else {
+            $this->ip = self::sanitizeIp($this->ip);
+        }
+
+        return parent::beforeSave($insert);
+    }
+
     /**
      * {@inheritdoc}
      */
